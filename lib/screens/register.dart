@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/screens/wrapper.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({super.key});
@@ -16,6 +17,18 @@ class _RegisterUserState extends State<RegisterUser> {
   signUp() async {
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text.trim(), password: password.text.trim());
+    Get.offAll(Wrapper());
+  }
+
+  signupGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+
+    await FirebaseAuth.instance.signInWithCredential(credential);
     Get.offAll(Wrapper());
   }
 
@@ -105,6 +118,22 @@ class _RegisterUserState extends State<RegisterUser> {
                       "SignUp",
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     )),
+                Divider(height: 50),
+                Text(
+                  "Sign in with Google",
+                  style: TextStyle(color: Colors.white),
+                ),
+                // SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    signupGoogle();
+                  },
+                  child: Image.asset(
+                    "assets/google.png",
+                    height: 60,
+                  ),
+                ),
+                SizedBox(height: 50),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -114,7 +143,7 @@ class _RegisterUserState extends State<RegisterUser> {
                     ),
                     TextButton(
                         onPressed: () {
-                          Get.offAllNamed("/login");
+                          Get.toNamed("/");
                         },
                         child: Text(
                           "Login",

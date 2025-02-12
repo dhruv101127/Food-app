@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery/screens/cart.dart';
 import 'package:food_delivery/screens/home_screen.dart';
 import 'package:food_delivery/screens/login.dart';
+import 'package:food_delivery/screens/order_history.dart';
+import 'package:food_delivery/screens/profile.dart';
 import 'package:food_delivery/screens/register.dart';
 import 'package:food_delivery/screens/wrapper.dart';
 import 'package:get/get.dart';
@@ -28,6 +30,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/signup", page: () => RegisterUser()),
         GetPage(name: "/homescreen", page: () => HomeScreen()),
         GetPage(name: "/cart", page: () => Cart()),
+        GetPage(name: "/profile", page: () => Profile()),
+        GetPage(name: "/orderHistory", page: () => OrderHistory())
       ],
       // home: Wrapper(),
     );

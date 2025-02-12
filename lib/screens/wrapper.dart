@@ -18,10 +18,10 @@ class _WrapperState extends State<Wrapper> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print("IF block is working");
+              // print("IF block is working");
               return HomeScreen();
             } else {
-              print("else block is working");
+              // print("else block is working");
               return LoginSignup();
             }
           }),

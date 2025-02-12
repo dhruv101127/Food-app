@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class ApiServices {
   Future<List<Model>?> getModel() async {
     try {
-      Uri url = Uri.parse("https://jsonplaceholder.typicode.com/users");
+      Uri url = Uri.parse("https://dummyjson.com/c/8e8d-950f-4017-97aa");
       http.Response response = await http.get(url);
 
       if (response.statusCode == 200) {

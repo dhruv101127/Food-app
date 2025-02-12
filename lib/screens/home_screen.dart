@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery/model/api_model.dart';
 import 'package:food_delivery/services/api_services.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   signout() async {
     await FirebaseAuth.instance.signOut();
+    GoogleSignIn().signOut();
   }
 
   @override
@@ -81,15 +83,21 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.grey[900],
           child: ListView(
             children: [
-              DrawerHeader(
-                child: Text(
-                  "Food App",
-                  style: TextStyle(color: Colors.white, fontSize: 35),
+              UserAccountsDrawerHeader(
+                decoration: BoxDecoration(),
+                accountName:
+                    Text(FirebaseAuth.instance.currentUser!.displayName ?? ""),
+                accountEmail:
+                    Text(FirebaseAuth.instance.currentUser!.email ?? ""),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: AssetImage("assets/profile_default.jpeg"),
+                  foregroundImage: NetworkImage(
+                      FirebaseAuth.instance.currentUser!.photoURL ?? ""),
                 ),
               ),
               ListTile(
                 onTap: () {
-                  navigator!.pop();
+                  Get.toNamed("/profile");
                 },
                 title: Text(
                   "Profile",
@@ -98,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               ListTile(
                 onTap: () {
-                  navigator!.pop();
+                  Get.toNamed("/orderHistory");
                 },
                 title: Text(
                   "Orders history",
@@ -144,12 +152,43 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 80),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    onPressed: () => signout(),
-                    child: Text(
-                      "Sign out",
-                      style: TextStyle(color: Colors.red),
-                    )),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    IconButton(
+                        icon: Icon(
+                          Icons.logout_outlined,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        onPressed: () {
+                          Get.defaultDialog(
+                              contentPadding: EdgeInsets.all(20),
+                              title: "Logout",
+                              titleStyle: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                              middleText: "Do you want to Logout?",
+                              middleTextStyle: TextStyle(fontSize: 17),
+                              cancel: IconButton(
+                                  style: IconButton.styleFrom(
+                                      foregroundColor: Colors.red,
+                                      iconSize: 30),
+                                  onPressed: () {
+                                    navigator!.pop();
+                                  },
+                                  icon: Icon(Icons.cancel_outlined)),
+                              confirm: IconButton(
+                                  onPressed: () {
+                                    signout();
+                                    navigator!.pop();
+                                  },
+                                  icon: Icon(Icons.done),
+                                  style: IconButton.styleFrom(
+                                      foregroundColor: Colors.green,
+                                      iconSize: 30)));
+                        }),
+                  ],
+                ),
               )
             ],
           ),
@@ -170,10 +209,66 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
-          Column(),
-          Column(),
-          Column(),
-          Column(),
+          Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(model[index].name ?? ''),
+                        onTap: () {},
+                      );
+                    },
+                    separatorBuilder: (context, int index) => Divider(),
+                    itemCount: model.length),
+              )
+            ],
+          ),
+          Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(model[index].name ?? ''),
+                        onTap: () {},
+                      );
+                    },
+                    separatorBuilder: (context, int index) => Divider(),
+                    itemCount: model.length),
+              )
+            ],
+          ),
+          Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(model[index].name ?? ''),
+                        onTap: () {},
+                      );
+                    },
+                    separatorBuilder: (context, int index) => Divider(),
+                    itemCount: model.length),
+              )
+            ],
+          ),
+          Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(model[index].name ?? ''),
+                        onTap: () {},
+                      );
+                    },
+                    separatorBuilder: (context, int index) => Divider(),
+                    itemCount: model.length),
+              )
+            ],
+          ),
         ]),
       ),
     );
